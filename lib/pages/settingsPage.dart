@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/components/header.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -10,12 +9,13 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomHeader('Settings', [],
-        IconButton(
+      appBar: AppBar(
+        title: Text('Settings'),
+        leading: IconButton(
           icon: Icon(Icons.arrow_back),
           color: Colors.black,
           onPressed: () { Navigator.pop(context); },
-        )
+        ),
       ),
       body: Center(
         child: Text('Settings'),

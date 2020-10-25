@@ -16,6 +16,7 @@ class DeckBloc {
   }
 
   getDecks() async {
+    if(!_deckController.isClosed)
     _deckController.sink.add(await DBProvider.db.getAllDecks());
   }
 

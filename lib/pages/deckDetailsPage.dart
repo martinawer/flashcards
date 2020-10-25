@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_flashcards/models/deck.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/components/header.dart';
 import 'deckEditPage.dart';
 
 class DeckDetailsPage extends StatelessWidget {
@@ -12,8 +11,9 @@ class DeckDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomHeader(this.deck.title, [],
-        IconButton(
+      appBar: AppBar(
+        title: Text(this.deck.title),
+        leading: IconButton(
           icon: Icon(Icons.arrow_back),
           color: Colors.black,
           onPressed: () { Navigator.pop(context); },

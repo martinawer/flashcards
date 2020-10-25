@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/Maddin/AndroidStudioProjects/flutter_flashcards/lib/pages/catalogPage.dart';
-import 'file:///C:/Users/Maddin/AndroidStudioProjects/flutter_flashcards/lib/pages/deckListPage.dart';
-import 'file:///C:/Users/Maddin/AndroidStudioProjects/flutter_flashcards/lib/pages/statisticPage.dart';
+import 'package:flutter_flashcards/pages/catalogPage.dart';
+import 'package:flutter_flashcards/pages/deckListPage.dart';
+import 'package:flutter_flashcards/pages/statisticPage.dart';
 
 class HomePage extends StatefulWidget {
   @override

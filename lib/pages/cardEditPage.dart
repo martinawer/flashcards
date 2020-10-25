@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/components/header.dart';
 
 class CardEditPage extends StatefulWidget {
   @override
@@ -12,18 +11,20 @@ class _CardEditPageState extends State<CardEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomHeader('Edit Card', [
-        IconButton(
-          icon: Icon(Icons.check),
-          color: Colors.blue,
-          onPressed: () { Navigator.pop(context); },
-        )
-      ],
+      appBar: AppBar(
+        title: Text('Edit Card'),
+        actions: [
           IconButton(
-            icon: Icon(Icons.arrow_back),
-            color: Colors.black,
+            icon: Icon(Icons.check),
+            color: Colors.blue,
             onPressed: () { Navigator.pop(context); },
           )
+        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black,
+          onPressed: () { Navigator.pop(context); },
+        )
       ),
       body: Container(
         child: Column(

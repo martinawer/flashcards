@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flashcards/bloc/deckBloc.dart';
 import 'package:flutter_flashcards/models/deck.dart';
 import 'package:flutter_flashcards/components/deckCard.dart';
-import 'package:flutter_flashcards/components/header.dart';
 import 'package:flutter_flashcards/pages/settingsPage.dart';
 
 class DeckListPage extends StatefulWidget {
@@ -29,15 +28,18 @@ class _DeckListPageState extends State<DeckListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomHeader('Decks', [
-        IconButton(
-          icon: Icon(Icons.settings),
-          color: Colors.blue,
-          onPressed: () {
-            navigateToSettings(context);
-          },
-        )
-      ]),
+      appBar: AppBar(
+        title: Text('Decks', style: Theme.of(context).appBarTheme.textTheme.headline1),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            color: Colors.blue,
+            onPressed: () {
+              navigateToSettings(context);
+            },
+          )
+        ],
+      ),
       body: StreamBuilder<List<Deck>>(
         stream: deckBloc.decks,
         builder: (BuildContext context, AsyncSnapshot<List<Deck>> snapshot) {
