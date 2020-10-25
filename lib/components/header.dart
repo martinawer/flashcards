@@ -15,7 +15,7 @@ class CustomHeader extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       title: Text(
           this.headerTitle,
-          style: TextStyle(color: Colors.black)
+          style: Theme.of(context).textTheme.headline1
       ),
       centerTitle: true,
       backgroundColor: Colors.white,

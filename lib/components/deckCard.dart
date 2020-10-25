@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/ui/deck.dart';
+import 'package:flutter_flashcards/models/deck.dart';
+import 'package:flutter_flashcards/pages/deckDetailsPage.dart';
+
 class DeckCard extends StatelessWidget {
     final Deck deck;
     DeckCard({this.deck}); //constructor
 
     @override
     Widget build(BuildContext context) {
-      return Center(
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DeckDetailsPage(this.deck)));
+        },
         child: Card(
           child: Container(
             width: 300,
@@ -18,20 +25,20 @@ class DeckCard extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(15, 10, 0, 3),
                   child: Text(
                       this.deck.title,
-                      style: TextStyle(fontSize: 24, letterSpacing: 0.4, color: Colors.blueGrey)
+                      style: Theme.of(context).textTheme.headline2
                   ),
                 ),
                 Container(
                   child: Text(
-                    'Cards: ${this.deck.numberOfCards.toString()}',
-                    style: TextStyle(fontSize: 20),
+                    'Cards: ${this.deck.size.toString()}',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                 ),
                 Container(
                   child: Text(
                     'Performance: ${this.deck.performance.toString()}%',
-                    style: TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                 )

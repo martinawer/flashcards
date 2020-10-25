@@ -1,17 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FlashCardTheme {
-  ThemeData build(BuildContext context) {
-    return ThemeData(
-      primaryColor: Colors.transparent,
-      accentColor: Colors.red,
-
-      fontFamily: 'Georgia',
-
-      textTheme: TextTheme(
-        headline1: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
-        headline2: TextStyle(fontSize: 26.0, fontWeight: FontWeight.w500),
-      )
-    );
-  }
+  static ThemeData standard = new ThemeData(
+    textTheme: TextTheme(
+      headline1: TextStyle(fontFamily: 'Merriweather', fontSize: 24, fontWeight: FontWeight.w700, color: Colors.black),
+      headline2: TextStyle(fontFamily: 'Merriweather', fontSize: 20, fontWeight: FontWeight.w700, color: Colors.black),
+      bodyText1: TextStyle(fontFamily: 'Montserrat', fontSize: 18, color: Colors.black26),
+    ),
+  );
 }

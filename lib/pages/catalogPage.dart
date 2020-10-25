@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/ui/header.dart';
+import 'package:flutter_flashcards/components/header.dart';
 
 class CatalogPage extends StatefulWidget {
   @override

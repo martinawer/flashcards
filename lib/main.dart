@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_flashcards/ui/homePage.dart';
+import 'file:///C:/Users/Maddin/AndroidStudioProjects/flutter_flashcards/lib/pages/homePage.dart';
+import 'package:flutter_flashcards/styles/themes.dart';
 
 void main() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
 
   runApp(FlashCardsApp());
 }
@@ -15,7 +16,7 @@ class FlashCardsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flashcards',
-      theme: ThemeData(fontFamily: 'Josefin Sans'),
+      theme: FlashCardTheme.standard,
       home: HomePage(),
     );
   }
