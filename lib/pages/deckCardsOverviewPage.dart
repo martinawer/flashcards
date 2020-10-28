@@ -51,8 +51,11 @@ class _DeckCardsOverviewPageState extends State<DeckCardsOverviewPage> {
                 Flashcard item = snapshot.data[index];
                 return InkWell(
                   child: FlashCardComponent(item),
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CardEditPage(item.deckId, card: item)))
-                      .then((updatedCard) => cardBloc.update(updatedCard)),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CardEditPage(item.deckId, card: item)))
+                    .then((updatedCard) => cardBloc.update(updatedCard)),
+                  onLongPress: () {
+                    _showOptionsDialog(item);
+                  }
                 );
               },
             );
@@ -71,4 +74,25 @@ class _DeckCardsOverviewPageState extends State<DeckCardsOverviewPage> {
       ),
     );
   }
+
+  _showOptionsDialog(Flashcard item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Delete Card'),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('Delete Card'),
+              onPressed: () {
+                Navigator.pop(context, 'Delete');
+                cardBloc.remove(item);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 }
+

@@ -36,7 +36,7 @@ class _DeckListPageState extends State<DeckListPage> {
             icon: Icon(Icons.settings),
             color: Colors.blue,
             onPressed: () {
-              navigateToSettings(context);
+              _navigateToSettings();
             },
           )
         ],
@@ -57,24 +57,7 @@ class _DeckListPageState extends State<DeckListPage> {
                       MaterialPageRoute(builder: (context) => DeckPreviewPage(item)));
                   },
                   onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: Text('Delete Deck'),
-                          children: <Widget>[
-                            SimpleDialogOption(
-                              onPressed: () {
-                                Navigator.pop(context, 'Delete');
-                                deckBloc.remove(item);
-                              },
-                              child: Text('Delete Deck'),
-                            )
-                          ],
-                        );
-                      },
-                    );
-
+                    _showOptionsDialog(item);
                   },
                 );
               },
@@ -87,49 +70,73 @@ class _DeckListPageState extends State<DeckListPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Add Deck'),
-                  content: TextField(
-                    controller: textInputController,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.black,
-                            style: BorderStyle.solid,
-                            width: 0.5
-                        ),
-                      ),
-                      border: InputBorder.none,
-                      hintText: 'Deck Name: ',
-                    ),
-                  ),
-                  actions: [
-                    FlatButton(
-                      child: Text('Create'),
-                      onPressed: () async {
-                        if(textInputController.text.isNotEmpty) {
-                          Deck newDeck = new Deck(title: textInputController.text);
-                          deckBloc.add(newDeck);
-                          Navigator.pop(context);
-                          textInputController.clear();
-                        }
-                      },
-                    ),
-                  ],
-                );
-              }
-          );
-          },
+          _showAddDeckDialog();
+        },
       ),
     );
   }
-}
 
-Future navigateToSettings(context) async {
-  Navigator.push(context, MaterialPageRoute(builder: (context) =>
-      SettingsPage()
-  ));
+  _showOptionsDialog(Deck item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Delete Deck'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, 'Delete');
+                deckBloc.remove(item);
+              },
+              child: Text('Delete Deck'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  _showAddDeckDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Add Deck'),
+            content: TextField(
+              controller: textInputController,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.black,
+                      style: BorderStyle.solid,
+                      width: 0.5
+                  ),
+                ),
+                border: InputBorder.none,
+                hintText: 'Deck Name: ',
+              ),
+            ),
+            actions: [
+              FlatButton(
+                child: Text('Create'),
+                onPressed: () async {
+                  if(textInputController.text.isNotEmpty) {
+                    Deck newDeck = new Deck(title: textInputController.text);
+                    deckBloc.add(newDeck);
+                    Navigator.pop(context);
+                    textInputController.clear();
+                  }
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  _navigateToSettings() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+        SettingsPage()
+    ));
+  }
 }
