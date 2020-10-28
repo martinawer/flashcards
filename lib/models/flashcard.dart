@@ -4,14 +4,16 @@ class Flashcard {
   String type;
   String front;
   String back;
+  int deckId;
 
-  Flashcard({this.id, this.type, this.front, this.back});
+  Flashcard({this.id, this.type, this.front, this.back, this.deckId});
 
   factory Flashcard.fromMap(Map<String, dynamic> json) => new Flashcard(
     id: json['id'],
     type: json['type'],
     front: json['front'],
     back: json['back'],
+    deckId: json['deckId'],
   );
 
   Map<String, dynamic> toMap() => {
@@ -19,5 +21,6 @@ class Flashcard {
     'type': type,
     'front': front,
     'back': back,
+    'deckId': deckId,
   };
 }

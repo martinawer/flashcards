@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
-import 'package:flutter_flashcards/pages/cardEditPage.dart';
 
-class FlashCardComponent extends StatelessWidget {
+class FlashCardComponent extends StatefulWidget {
   final Flashcard card;
   FlashCardComponent(this.card);
+  @override
+  _FlashCardComponentState createState() => _FlashCardComponentState();
+}
+
+class _FlashCardComponentState extends State<FlashCardComponent> {
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: InkWell(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CardEditPage())),
-        child: Container(
+      child: Container(
         decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-    boxShadow: [
-    BoxShadow(blurRadius: 3, offset: Offset(1, 1), color: Colors.black12),
-    ],
-    ),
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          boxShadow: [
+            BoxShadow(blurRadius: 3, offset: Offset(1, 1), color: Colors.black12),
+          ],
+        ),
         child: Column(
           children: [
             Container(
@@ -29,13 +31,12 @@ class FlashCardComponent extends StatelessWidget {
               ),
             ),
             Container(
-              child: Container(
-                child: Text('Basic: ${this.card.type}\nFront: ${this.card.front}\nBack: ${this.card.back}'),
-              )
+                child: Container(
+                  child: Text('Basic: ${this.widget.card.type}\nFront: ${this.widget.card.front}\nBack: ${this.widget.card.back}'),
+                )
             ),
           ],
         ),
-      )
       )
     );
   }

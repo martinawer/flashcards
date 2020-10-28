@@ -1,23 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flashcards/bloc/cardBloc.dart';
+import 'package:flutter_flashcards/models/flashcard.dart';
 
 class CardEditPage extends StatefulWidget {
+  final int deckId;
+  final Flashcard card;
+  CardEditPage(this.deckId, { this.card });
   @override
   _CardEditPageState createState() => _CardEditPageState();
 }
 
 class _CardEditPageState extends State<CardEditPage> {
-  String selectedType = 'Basic';
+
+
+  TextEditingController frontInputController;
+  TextEditingController backInputController;
+  CardBloc cardBloc;
+  Flashcard newCard;
+  String selectedType;
+
+  @override
+  void initState() {
+    super.initState();
+    newCard = widget.card != null ? widget.card : new Flashcard();
+    selectedType = widget.card != null ? widget.card.type : 'Basic';
+    frontInputController = TextEditingController(text: newCard.front);
+    backInputController = TextEditingController(text: newCard.back);
+    cardBloc = new CardBloc(widget.deckId);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Card'),
+        title: Text('Edit Card', style: Theme.of(context).appBarTheme.textTheme.headline1),
         actions: [
           IconButton(
             icon: Icon(Icons.check),
             color: Colors.blue,
-            onPressed: () { Navigator.pop(context); },
+            onPressed: () {
+              newCard.type = selectedType;
+              newCard.front = frontInputController.text;
+              newCard.back = backInputController.text;
+              newCard.deckId = widget.deckId;
+              Navigator.pop(context, newCard);
+            },
           )
         ],
         leading: IconButton(
@@ -57,19 +84,21 @@ class _CardEditPageState extends State<CardEditPage> {
             ),
             Container(
               child: TextFormField(
+                controller: frontInputController,
                 decoration: const InputDecoration(
-                  labelText: 'Front'
-                )
+                  labelText: 'Front',
+                ),
               )
             ),
             Container(
               child: TextFormField(
+                controller: backInputController,
                 decoration: const InputDecoration(
                   labelText: 'Back'
                 )
               )
             )
-          ]
+          ],
         ),
       )
     );

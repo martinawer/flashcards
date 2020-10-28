@@ -11,7 +11,7 @@ class _CatalogPageState extends State<CatalogPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Catalog'),
+        title: Text('Catalog', style: Theme.of(context).appBarTheme.textTheme.headline1),
       ),
     );
   }

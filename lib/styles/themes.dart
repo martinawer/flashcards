@@ -8,7 +8,7 @@ class FlashCardTheme {
       color: Colors.white,
       brightness: Brightness.light,
       textTheme: TextTheme(
-        headline1: TextStyle(fontFamily: 'Merriweather', fontSize: 24, fontWeight: FontWeight.w700, color: Colors.black),
+        headline1: TextStyle(fontFamily: 'Merriweather', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.black),
       )
     ),
     textTheme: TextTheme(

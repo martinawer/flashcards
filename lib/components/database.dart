@@ -33,7 +33,7 @@ class DBProvider {
 
   _createFlashcardTable(Database db) async {
     await db.execute('CREATE TABLE Flashcard ('
-        'id INTEGER PRIMARY KEY,'
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
         'type TEXT NOT NULL,'
         'front TEXT NOT NULL,'
         'back TEXT NOT NULL,'
@@ -44,7 +44,7 @@ class DBProvider {
 
   _createDeckTable(Database db) async {
     await db.execute('CREATE TABLE Deck ('
-        'id INTEGER PRIMARY KEY,'
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
         'title TEXT,'
         'size INTEGER,'
         'performance INTEGER'
@@ -63,18 +63,6 @@ class DBProvider {
     return res;
   }
 
-  getDeck(int id) async {
-    final db = await database;
-    var res = await db.query('Deck', where: 'id = ?', whereArgs: [id]);
-    return res.isNotEmpty ? Deck.fromMap(res.first) : Null;
-  }
-
-  getFlashcard(int id) async {
-    final db = await database;
-    var res = await db.query('Flashcard', where: 'id = ?', whereArgs: [id]);
-    return res.isNotEmpty ? Flashcard.fromMap(res.first) : Null;
-  }
-
   Future<List<Deck>> getAllDecks() async {
     final db = await database;
     var res = await db.query('Deck');
@@ -82,7 +70,7 @@ class DBProvider {
     return list;
   }
 
-  getAllFlashCardsFromDeck(int deckId) async {
+  Future<List<Flashcard>> getAllFlashCardsFromDeck(int deckId) async {
     final db = await database;
     var res = await db.query('Flashcard', where: 'deckId = ?', whereArgs: [deckId]);
     List<Flashcard> list = res.isNotEmpty ? res.map((fc) => Flashcard.fromMap(fc)).toList() : [];
@@ -106,6 +94,13 @@ class DBProvider {
   deleteDeck(int id) async {
     final db = await database;
     var res = db.delete('Deck', where: 'id = ?', whereArgs: [id]);
+    return res;
+  }
+
+  cardExists(int id) async {
+    final db = await database;
+    var res = db.query('Flashcard', where: 'id = ?', whereArgs: [id]);
+    print(res);
     return res;
   }
 

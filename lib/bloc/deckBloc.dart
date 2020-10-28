@@ -16,12 +16,20 @@ class DeckBloc {
   }
 
   getDecks() async {
-    if(!_deckController.isClosed)
-    _deckController.sink.add(await DBProvider.db.getAllDecks());
+    if(!_deckController.isClosed) {
+      _deckController.sink.add(await DBProvider.db.getAllDecks());
+    }
   }
 
   add(Deck deck) async {
     DBProvider.db.newDeck(deck);
     getDecks();
+  }
+
+  remove(Deck deck) async {
+    if(!_deckController.isClosed) {
+      DBProvider.db.deleteDeck(deck.id);
+      getDecks();
+    }
   }
 }

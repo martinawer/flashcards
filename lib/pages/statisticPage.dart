@@ -11,7 +11,7 @@ class _StatisticPageState extends State<StatisticPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statistics'),
+        title: Text('Statistics', style: Theme.of(context).appBarTheme.textTheme.headline1),
       ),
     );
   }

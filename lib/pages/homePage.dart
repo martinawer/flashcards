@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
-        items: initBottomNavigationBarItems(),
+        items: _initBottomNavigationBarItems(),
         onTap: (index) {
           bottomTapped(index);
         },
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-List<BottomNavigationBarItem> initBottomNavigationBarItems() {
+List<BottomNavigationBarItem> _initBottomNavigationBarItems() {
   return [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),

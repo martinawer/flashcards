@@ -3,6 +3,7 @@ import 'package:flutter_flashcards/bloc/deckBloc.dart';
 import 'package:flutter_flashcards/models/deck.dart';
 import 'package:flutter_flashcards/components/deckCard.dart';
 import 'package:flutter_flashcards/pages/settingsPage.dart';
+import 'package:flutter_flashcards/pages/deckPreviewPage.dart';
 
 class DeckListPage extends StatefulWidget {
   @override
@@ -48,7 +49,34 @@ class _DeckListPageState extends State<DeckListPage> {
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
                 Deck item = snapshot.data[index];
-                return DeckCard(deck: item);
+                return InkWell(
+                  child: DeckCard(deck: item),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DeckPreviewPage(item)));
+                  },
+                  onLongPress: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          title: Text('Delete Deck'),
+                          children: <Widget>[
+                            SimpleDialogOption(
+                              onPressed: () {
+                                Navigator.pop(context, 'Delete');
+                                deckBloc.remove(item);
+                              },
+                              child: Text('Delete Deck'),
+                            )
+                          ],
+                        );
+                      },
+                    );
+
+                  },
+                );
               },
             );
           } else {
@@ -82,7 +110,7 @@ class _DeckListPageState extends State<DeckListPage> {
                     FlatButton(
                       child: Text('Create'),
                       onPressed: () async {
-                        if(textInputController.text.isNotEmpty) { //TODO: check if deck name is really not empty (e.g. whitespaces)
+                        if(textInputController.text.isNotEmpty) {
                           Deck newDeck = new Deck(title: textInputController.text);
                           deckBloc.add(newDeck);
                           Navigator.pop(context);
