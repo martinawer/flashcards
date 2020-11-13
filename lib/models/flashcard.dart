@@ -8,6 +8,8 @@ class Flashcard {
 
   Flashcard({this.id, this.type, this.front, this.back, this.deckId});
 
+  ///DB Conversions
+
   factory Flashcard.fromMap(Map<String, dynamic> json) => new Flashcard(
     id: json['id'],
     type: json['type'],

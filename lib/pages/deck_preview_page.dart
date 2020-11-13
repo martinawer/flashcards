@@ -1,23 +1,18 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_flashcards/components/leading_header_button.dart';
 import 'package:flutter_flashcards/models/deck.dart';
 import 'package:flutter/material.dart';
-import 'deckCardsOverviewPage.dart';
 
 class DeckPreviewPage extends StatelessWidget {
   final Deck deck;
-
-  DeckPreviewPage(this.deck);
+  DeckPreviewPage({@required this.deck});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(this.deck.title, style: Theme.of(context).appBarTheme.textTheme.headline1),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () { Navigator.pop(context); },
-        )
+        leading: LeadingHeaderButton()
       ),
       body: Center(
         child: Padding(
@@ -25,26 +20,23 @@ class DeckPreviewPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('Learn ${this.deck.title}',
-                style: Theme.of(context).textTheme.headline2),
-              SizedBox(
-                  height: 15
-              ),
+              Text('Learn ${this.deck.title}', style: Theme.of(context).textTheme.headline2),
+              SizedBox(height: 15),
               ButtonTheme(
                 minWidth: 200,
                 height: 46,
                 child: RaisedButton.icon(
                   icon: Icon(Icons.play_arrow),
                   color: Colors.green,
-                  onPressed: () => print('yes'),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/learn', arguments: this.deck);
+                  },
                   textColor: Colors.white,
                   label: Text('Learn',
                     style: Theme.of(context).textTheme.bodyText1),
                 ),
               ),
-              SizedBox(
-                height: 8
-              ),
+              SizedBox(height: 8),
               ButtonTheme(
                 minWidth: 200,
                 height: 50,
@@ -53,7 +45,7 @@ class DeckPreviewPage extends StatelessWidget {
                   textColor: Colors.white,
                   color: Colors.green,
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DeckCardsOverviewPage(this.deck) ));
+                    Navigator.of(context).pushNamed('/edit', arguments: this.deck);
                   },
                   label: Text('Edit',
                       style: Theme.of(context).textTheme.bodyText1),

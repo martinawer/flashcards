@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'file:///C:/Users/Maddin/AndroidStudioProjects/flutter_flashcards/lib/pages/homePage.dart';
+import 'package:flutter_flashcards/router/app_router.dart';
 import 'package:flutter_flashcards/styles/themes.dart';
 
 void main() {
@@ -8,16 +8,29 @@ void main() {
     statusBarColor: Colors.transparent,
   ));
 
-  runApp(FlashCardsApp());
+  runApp(FlashCardApp());
 }
 
-class FlashCardsApp extends StatelessWidget {
+class FlashCardApp extends StatefulWidget {
+  @override
+  _FlashCardAppState createState() => _FlashCardAppState();
+}
+
+class _FlashCardAppState extends State<FlashCardApp> {
+  final AppRouter _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flashcards',
       theme: FlashCardTheme.standard,
-      home: HomePage(),
+      initialRoute: '/',
+      onGenerateRoute: _appRouter.onGenerateRoute,
     );
+  }
+
+  @override
+  void dispose() {
+    _appRouter.dispose();
+    super.dispose();
   }
 }

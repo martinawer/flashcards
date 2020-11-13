@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/bloc/cardBloc.dart';
+import 'package:flutter_flashcards/components/leading_header_button.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
 
-class CardEditPage extends StatefulWidget {
-  final int deckId;
+class FlashcardEditPage extends StatefulWidget {
   final Flashcard card;
-  CardEditPage(this.deckId, { this.card });
+  FlashcardEditPage({@required this.card});
+
   @override
-  _CardEditPageState createState() => _CardEditPageState();
+  _FlashcardEditPageState createState() => _FlashcardEditPageState();
 }
 
-class _CardEditPageState extends State<CardEditPage> {
-
-
+class _FlashcardEditPageState extends State<FlashcardEditPage> {
   TextEditingController frontInputController;
   TextEditingController backInputController;
-  CardBloc cardBloc;
   Flashcard newCard;
-  String selectedType;
 
   @override
   void initState() {
     super.initState();
-    newCard = widget.card != null ? widget.card : new Flashcard();
-    selectedType = widget.card != null ? widget.card.type : 'Basic';
+    newCard = widget.card;
     frontInputController = TextEditingController(text: newCard.front);
     backInputController = TextEditingController(text: newCard.back);
-    cardBloc = new CardBloc(widget.deckId);
   }
 
   @override
@@ -39,19 +33,13 @@ class _CardEditPageState extends State<CardEditPage> {
             icon: Icon(Icons.check),
             color: Colors.blue,
             onPressed: () {
-              newCard.type = selectedType;
               newCard.front = frontInputController.text;
               newCard.back = backInputController.text;
-              newCard.deckId = widget.deckId;
-              Navigator.pop(context, newCard);
+              Navigator.of(context).pop(newCard);
             },
           )
         ],
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () { Navigator.pop(context); },
-        )
+        leading: LeadingHeaderButton(),
       ),
       body: Container(
         child: Column(
@@ -63,10 +51,12 @@ class _CardEditPageState extends State<CardEditPage> {
                     child:Text('Type: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                   ),
                   DropdownButton<String>(
-                    onChanged: (String newType) => { setState(() {
-                      selectedType = newType;
-                    })},
-                    value: selectedType,
+                    onChanged: (String newType) => {
+                      setState(() {
+                       newCard.type = newType;
+                      })
+                    },
+                    value: newCard.type == null ? newCard.type = 'Basic' : newCard.type,
                     icon: Icon(Icons.arrow_drop_down),
                     items: [
                       DropdownMenuItem(

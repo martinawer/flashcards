@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flashcards/components/leading_header_button.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -11,11 +12,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: Theme.of(context).appBarTheme.textTheme.headline1),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () { Navigator.pop(context); },
-        ),
+        leading: LeadingHeaderButton()
       ),
       body: Center(
         child: Text('Settings'),

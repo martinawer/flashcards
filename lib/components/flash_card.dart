@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
 
-class FlashCardComponent extends StatefulWidget {
+class FlashCardComponent extends StatelessWidget {
   final Flashcard card;
   FlashCardComponent(this.card);
-  @override
-  _FlashCardComponentState createState() => _FlashCardComponentState();
-}
-
-class _FlashCardComponentState extends State<FlashCardComponent> {
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +27,7 @@ class _FlashCardComponentState extends State<FlashCardComponent> {
             ),
             Container(
                 child: Container(
-                  child: Text('Basic: ${this.widget.card.type}\nFront: ${this.widget.card.front}\nBack: ${this.widget.card.back}'),
+                  child: Text('Basic: ${this.card.type}\nFront: ${this.card.front}\nBack: ${this.card.back}'),
                 )
             ),
           ],
