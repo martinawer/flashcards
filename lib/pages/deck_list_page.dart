@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_flashcards/bloc/deck_bloc.dart';
-import 'package:flutter_flashcards/bloc/deck_event.dart';
-import 'package:flutter_flashcards/bloc/deck_state.dart';
-import 'package:flutter_flashcards/components/deck_card.dart';
+import 'package:flutter_flashcards/bloc/decks/decks.dart';
+import 'package:flutter_flashcards/error/exceptions.dart';
+import 'package:flutter_flashcards/widgets/deck_item.dart';
 import 'package:flutter_flashcards/models/deck.dart';
 
 class DeckListPage extends StatefulWidget {
@@ -16,15 +15,15 @@ class _DeckListPageState extends State<DeckListPage> {
   DeckBloc deckBloc;
 
   @override
-  void initState() {
-    super.initState();
-    deckBloc = BlocProvider.of<DeckBloc>(context);
+  void dispose() {
+    textInputController.dispose();
+    super.dispose();
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    textInputController.dispose();
+  void initState() {
+    deckBloc = BlocProvider.of<DeckBloc>(context);
+    super.initState();
   }
 
   @override
@@ -50,128 +49,113 @@ class _DeckListPageState extends State<DeckListPage> {
         ],
       ),
       body: BlocBuilder<DeckBloc, DeckState>(
-        builder: (context, state) {
+        builder: (BuildContext context, DeckState state) {
           if(state is DeckInitial) {
             deckBloc.add(LoadDecks());
-            return _buildInitialView();
+            return Container();
           } else if(state is DecksLoading) {
-            return _buildLoadingView();
+            return Container(child: Center(child: CircularProgressIndicator()));
           } else if(state is DecksLoaded) {
             return _buildDecksView(context, state);
-          } else if(state is DeckError) {
-            return _buildErrorView();
           } else {
-            return _buildErrorView();
+            return Container(child: Center(child: Text('Error')));
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          _showAddDeckDialog();
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return _showAddDeckDialog();
+            }
+          );
         },
       ),
-    );
-  }
-
-
-  _showOptionsDialog(Deck item) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: Text('Delete Deck'),
-          children: <Widget>[
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/');
-                deckBloc.add(DeleteDeck(item.id));
-              },
-              child: Text('Delete Deck'),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  _showAddDeckDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Add Deck'),
-            actions: [
-              FlatButton(
-                child: Text('Create'),
-                onPressed: () async {
-                  if(textInputController.text.isNotEmpty) {
-                    Deck newDeck = new Deck(title: textInputController.text);
-                    deckBloc.add(AddDeck(newDeck));
-                    Navigator.of(context).pushNamed('/');
-                    textInputController.clear();
-                  }
-                },
-              ),
-            ],
-            content: TextField(
-              controller: textInputController,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Deck Name: ',
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colors.black,
-                      style: BorderStyle.solid,
-                      width: 0.5
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
-    );
-  }
-
-  Widget _buildInitialView() {
-    return Container();
-  }
-
-  Widget _buildLoadingView() {
-    return Container(
-      child: Center(
-        child: CircularProgressIndicator()
-      )
     );
   }
 
   Widget _buildDecksView(BuildContext context, DeckState state) {
     if(state is DecksLoaded) {
       return ListView.builder(
+          key: Key('deckList'),
           itemCount: state.decks.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (BuildContext context, int index) {
             Deck item =  state.decks[index];
+            print('deckListPage: ${item.toMap()}');
             return InkWell(
-              child: DeckCard(deck: item),
+              child: DeckItem(deck: item),
               onTap: () {
-                Navigator.of(context).pushNamed('/deck', arguments: item);
+                Navigator.of(context).pushNamed('/deck', arguments: item.id).then((value) {
+                  setState(() {
+                    deckBloc.add(LoadDecks());
+                  });
+                });
               },
               onLongPress: () {
-                _showOptionsDialog(item);
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return _showOptionsDialog(item);
+                    }
+                );
               },
             );
           }
       );
     } else {
-      throw StateError;
+      throw StateException('Invalid Function call in current State: $state');
     }
   }
 
-  Widget _buildErrorView() {
-    return Container(
-      child: Center(
-        child: Text('Error'),
-      )
+
+  Widget _showOptionsDialog(Deck item) {
+    return SimpleDialog(
+      title: Text('Delete Deck'),
+      children: <Widget>[
+        SimpleDialogOption(
+          onPressed: () {
+            Navigator.of(context).pushNamed('/');
+            deckBloc.add(DeleteDeck(item.id));
+          },
+          child: Text('Delete Deck'),
+        )
+      ],
+    );
+  }
+
+  Widget _showAddDeckDialog() {
+    return AlertDialog(
+      title: Text('Add Deck'),
+      actions: [
+        FlatButton(
+          child: Text('Create'),
+          onPressed: () async {
+            if(textInputController.text.isNotEmpty && textInputController.text.length <= 40) {
+              deckBloc.add(AddDeck(Deck(textInputController.text, size: 0, performance: 0)));
+              await Navigator.of(context).pushNamed('/');
+              textInputController.clear();
+            }
+          },
+        ),
+      ],
+      content: TextField(
+        controller: textInputController,
+        maxLength: 40,
+        maxLengthEnforced: true,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Deck Name ',
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.black,
+                style: BorderStyle.solid,
+                width: 0.5
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

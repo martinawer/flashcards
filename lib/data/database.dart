@@ -18,8 +18,8 @@ class DBProvider {
   }
 
   Future<Database> initDB() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'mainDB.db');
+      Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'flashcards.db');
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
           await _createDeckTable(db);
@@ -27,28 +27,30 @@ class DBProvider {
         });
   }
 
-  _createFlashcardTable(Database db) async {
+  Future<void> _createFlashcardTable(Database db) async {
     await db.execute('CREATE TABLE Flashcard ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT,'
         'type TEXT NOT NULL,'
         'front TEXT NOT NULL,'
         'back TEXT NOT NULL,'
         'deckId INTEGER,'
+        'tags TEXT,'
         'FOREIGN KEY(deckId) REFERENCES Deck(id)'
         ')');
   }
 
-  _createDeckTable(Database db) async {
+  Future<void> _createDeckTable(Database db) async {
     await db.execute('CREATE TABLE Deck ('
         'id INTEGER PRIMARY KEY AUTOINCREMENT,'
         'title TEXT,'
-        'size INTEGER,'
-        'performance INTEGER'
+        'size INTEGER NOT NULL,'
+        'performance INTEGER NOT NULL,'
+        'tags TEXT'
         ')');
   }
 
-  Future close() async {
-    var db = await database;
+  Future<void> close() async {
+    Database db = await database;
     return db.close();
   }
 }

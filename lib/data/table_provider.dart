@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'database.dart';
 
-abstract class TableProvider {
+class TableProvider {
   const TableProvider();
 
   Future<Database> get database async {

@@ -1,25 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_flashcards/bloc/card_bloc.dart';
-import 'package:flutter_flashcards/bloc/deck_bloc.dart';
-import 'package:flutter_flashcards/data/card_provider.dart';
+import 'package:flutter_flashcards/bloc/cards/card_bloc.dart';
+import 'package:flutter_flashcards/bloc/decks/deck_bloc.dart';
 import 'package:flutter_flashcards/data/deck_provider.dart';
-import 'package:flutter_flashcards/models/deck.dart';
-import 'package:flutter_flashcards/models/flashcard.dart';
-import 'package:flutter_flashcards/pages/flashcard_overview_page.dart';
-import 'package:flutter_flashcards/pages/deck_list_page.dart';
-import 'package:flutter_flashcards/pages/deck_preview_page.dart';
-import 'package:flutter_flashcards/pages/error_page.dart';
-import 'package:flutter_flashcards/pages/flashcard_edit_page.dart';
-import 'package:flutter_flashcards/pages/learn_page.dart';
-import 'package:flutter_flashcards/pages/settings_page.dart';
-import 'package:flutter_flashcards/pages/statistics_page.dart';
+import 'package:flutter_flashcards/data/card_provider.dart';
+import 'package:flutter_flashcards/models/models.dart';
+import 'package:flutter_flashcards/pages/pages.dart';
 
 class AppRouter {
-  final DeckBloc _deckBloc = new DeckBloc(DeckProvider());
-  final CardBloc _cardBloc = new CardBloc(CardProvider());
-
+  final DeckBloc _deckBloc = DeckBloc(DeckProvider());
+  final CardBloc _cardBloc = CardBloc(CardProvider());
+  //TODO: can do separate module for DI with get it
   Route onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case '/':
@@ -48,11 +40,17 @@ class AppRouter {
           return _errorRoute();
         }
         break;
+      case '/learn_overview':
+        return MaterialPageRoute(builder: (_) => LearnOverviewPage());
+        break;
       case '/deck':
-        if(routeSettings.arguments is Deck) {
+        if(routeSettings.arguments is int) {
           return MaterialPageRoute(
-            builder: (_) => DeckPreviewPage(
-              deck: routeSettings.arguments
+            builder: (_) => BlocProvider.value(
+              value: _deckBloc,
+              child: DeckPreviewPage(
+                deckId: routeSettings.arguments,
+              )
             )
           );
         } else {
@@ -71,7 +69,7 @@ class AppRouter {
                       value: _deckBloc,
                     )
                   ],
-                  child: DeckCardsOverviewPage(
+                  child: FlashcardsOverviewPage(
                     deck: routeSettings.arguments,
                   )
               )

@@ -1,0 +1,18 @@
+[
+  {
+    "id": null,
+    "type": "Basic",
+    "front": "test front",
+    "back": "test back",
+    "deckId": 1,
+    "tags": "{}"
+  },
+  {
+    "id": null,
+    "type": "Basic",
+    "front": "test front2",
+    "back": "test back2",
+    "deckId": 1,
+    "tags": "{}"
+  }
+]

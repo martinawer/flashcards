@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/components/leading_header_button.dart';
+import 'package:flutter_flashcards/widgets/leading_header_button.dart';
 
 class SettingsPage extends StatefulWidget {
   @override

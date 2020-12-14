@@ -28,6 +28,14 @@ class DecksLoaded extends DeckState {
   List<Object> get props => [decks];
 }
 
+class DeckLoaded extends DeckState {
+  final Deck deck;
+  const DeckLoaded(this.deck);
+
+  @override
+  List<Object> get props => [deck];
+}
+
 
 class DeckError extends DeckState {
   final String message;

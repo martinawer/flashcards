@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/components/leading_header_button.dart';
+import 'package:flutter_flashcards/widgets/leading_header_button.dart';
 
 class Error404Page extends StatelessWidget {
 

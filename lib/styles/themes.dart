@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FlashCardTheme {
-  static ThemeData standard = new ThemeData(
+  static ThemeData standard = ThemeData(
     appBarTheme: AppBarTheme(
       centerTitle: true,
       color: Colors.white,

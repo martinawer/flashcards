@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flashcards/components/leading_header_button.dart';
+import 'package:flutter_flashcards/widgets/leading_header_button.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
 
 class FlashcardEditPage extends StatefulWidget {
@@ -13,14 +13,14 @@ class FlashcardEditPage extends StatefulWidget {
 class _FlashcardEditPageState extends State<FlashcardEditPage> {
   TextEditingController frontInputController;
   TextEditingController backInputController;
-  Flashcard newCard;
+  String cardType;
 
   @override
   void initState() {
     super.initState();
-    newCard = widget.card;
-    frontInputController = TextEditingController(text: newCard.front);
-    backInputController = TextEditingController(text: newCard.back);
+    cardType = widget.card.type;
+    frontInputController = TextEditingController(text: widget.card.front);
+    backInputController = TextEditingController(text: widget.card.back);
   }
 
   @override
@@ -33,9 +33,15 @@ class _FlashcardEditPageState extends State<FlashcardEditPage> {
             icon: Icon(Icons.check),
             color: Colors.blue,
             onPressed: () {
-              newCard.front = frontInputController.text;
-              newCard.back = backInputController.text;
-              Navigator.of(context).pop(newCard);
+              Navigator.of(context).pop(
+                Flashcard(
+                    id: widget.card.id,
+                    type: cardType,
+                    front: frontInputController.text,
+                    back: backInputController.text,
+                    deckId: widget.card.deckId
+                )
+              );
             },
           )
         ],
@@ -53,10 +59,10 @@ class _FlashcardEditPageState extends State<FlashcardEditPage> {
                   DropdownButton<String>(
                     onChanged: (String newType) => {
                       setState(() {
-                       newCard.type = newType;
+                       cardType = newType;
                       })
                     },
-                    value: newCard.type == null ? newCard.type = 'Basic' : newCard.type,
+                    value: cardType ??= 'Basic',
                     icon: Icon(Icons.arrow_drop_down),
                     items: [
                       DropdownMenuItem(
@@ -72,6 +78,7 @@ class _FlashcardEditPageState extends State<FlashcardEditPage> {
                 ],
               ),
             ),
+            //TODO: add check, inputcontroller should not be empty
             Container(
               child: TextFormField(
                 controller: frontInputController,

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_flashcards/bloc/card_bloc.dart';
-import 'package:flutter_flashcards/bloc/card_event.dart';
-import 'package:flutter_flashcards/bloc/card_state.dart';
-import 'package:flutter_flashcards/components/leading_header_button.dart';
-import 'package:flutter_flashcards/components/learn_card.dart';
+import 'package:flutter_flashcards/bloc/cards/cards.dart';
+import 'package:flutter_flashcards/widgets/leading_header_button.dart';
+import 'package:flutter_flashcards/widgets/learn_card.dart';
 import 'package:flutter_flashcards/models/deck.dart';
+import 'package:flutter_flashcards/models/flashcard.dart';
 
 class LearnPage extends StatefulWidget {
   final Deck deck;
@@ -17,13 +16,17 @@ class LearnPage extends StatefulWidget {
 
 class _LearnPageState extends State<LearnPage> {
   CardBloc cardBloc;
-  bool isFront;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
     cardBloc = BlocProvider.of<CardBloc>(context);
-    isFront = false;
+    cardBloc.add(LoadCards(widget.deck.id));
+    super.didChangeDependencies();
   }
 
   @override
@@ -34,7 +37,7 @@ class _LearnPageState extends State<LearnPage> {
         leading: LeadingHeaderButton(),
       ),
       body: BlocBuilder<CardBloc, CardState>(
-        buildWhen: (previous, current) {
+        buildWhen: (CardState previous, CardState current) {
           if(previous is CardInitial && current is CardsLoading) {
             return true;
           } else if(previous is CardsLoading && current is CardsLoaded) {
@@ -45,28 +48,11 @@ class _LearnPageState extends State<LearnPage> {
         },
         builder: (BuildContext context, CardState state) {
           if(state is CardInitial) {
-            cardBloc.add(LoadCards(widget.deck.id));
             return _buildInitialView();
           } else if(state is CardsLoading){
             return _buildLoadingView();
           } else if(state is CardsLoaded) {
-            return Container(
-              child: Column(
-                children: [
-                  Row(mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        child: LearnCard(text: 'Builder Yes'),
-                        onTap: () {
-                          _updateCard();
-                        },
-                      ),
-                    ],
-                  ),
-                  _buildReflectionButtons()
-                ],
-              ),
-            );
+            return _buildCard(state.cards);
           } else {
             return _buildErrorView();
           }
@@ -75,32 +61,8 @@ class _LearnPageState extends State<LearnPage> {
     );
   }
 
-  Widget _buildReflectionButtons() {
-    if(isFront == false) {
-      return Row();
-    } else {
-      return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            FlatButton(
-              child: Text('Good'),
-              textColor: Colors.green,
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: Text('OK'),
-              textColor: Colors.orangeAccent,
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: Text('Bad'),
-              textColor: Colors.red,
-              onPressed: () {},
-            )
-          ]
-      );
-    }
-
+  Widget _buildCard(List<Flashcard> cards) {
+    return LearnCard(cards: cards);
   }
 
   Widget _buildLoadingView() {
@@ -115,16 +77,9 @@ class _LearnPageState extends State<LearnPage> {
 
   Widget _buildErrorView() {
     return Card(
-      child: Center(child: Text('Error'))
+      child: Center(
+        child: Text('Error')
+      )
     );
   }
-
-  void _updateCard() {
-    if(isFront == true) {
-      setState(() { isFront = false;});
-    } else {
-      setState(() { isFront = true;});
-    }
-  }
-
 }

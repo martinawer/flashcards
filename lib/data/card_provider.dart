@@ -1,32 +1,29 @@
 import 'package:flutter_flashcards/data/table_provider.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
+import 'package:sqflite/sqflite.dart';
 
 class CardProvider extends TableProvider {
   const CardProvider();
 
-  newFlashcard(Flashcard newFlashcard) async {
-    print(newFlashcard.toMap());
-    final db = await database;
-    var res = await db.insert('Flashcard', newFlashcard.toMap());
-    return res;
+  Future<void> insert(Flashcard newFlashcard) async {
+    final Database db = await database;
+    await db.insert('Flashcard', newFlashcard.toMap());
   }
 
-  Future<List<Flashcard>> getAllFlashCardsFromDeck(int deckId) async {
-    final db = await database;
-    var res = await db.query('Flashcard', where: 'deckId = ?', whereArgs: [deckId]);
-    List<Flashcard> list = res.isNotEmpty ? res.map((fc) => Flashcard.fromMap(fc)).toList() : [];
-    return list;
+  Future<List<Flashcard>> getFlashcardsFromDeck(int deckId) async {
+    final Database db = await database;
+    List<Map<String, dynamic>> res = await db.query('Flashcard', where: 'deckId = ?', whereArgs: [deckId]);
+    return res.isNotEmpty ? res.map((fc) => Flashcard.fromMap(fc)).toList() : [];
   }
 
-  updateCard(Flashcard newFlashcard) async {
-    final db = await database;
-    var res = await db.update('Flashcard', newFlashcard.toMap(), where: 'id= ?', whereArgs: [newFlashcard.id]);
-    return res;
+  Future<void> update(Flashcard newFlashcard) async {
+    final Database db = await database;
+    await db.update('Flashcard', newFlashcard.toMap(), where: 'id= ?', whereArgs: [newFlashcard.id]);
   }
 
-  deleteCard(int id) async {
-    final db = await database;
-    var res = await db.delete('Flashcard', where: 'id = ?', whereArgs: [id]);
-    return res;
+  Future<void> delete(int id) async {
+    final Database db = await database;
+    await db.delete('Flashcard', where: 'id = ?', whereArgs: [id]);
   }
+
 }

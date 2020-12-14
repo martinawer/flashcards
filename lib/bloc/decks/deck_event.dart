@@ -13,6 +13,14 @@ class LoadDecks extends DeckEvent {
   List<Object> get props => [];
 }
 
+class GetDeck extends DeckEvent {
+  final int id;
+  const GetDeck(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 class AddDeck extends DeckEvent {
   final Deck newDeck;
   const AddDeck(this.newDeck);

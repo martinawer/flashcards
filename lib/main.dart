@@ -8,6 +8,7 @@ void main() {
     statusBarColor: Colors.transparent,
   ));
 
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(FlashCardApp());
 }
 
@@ -18,6 +19,7 @@ class FlashCardApp extends StatefulWidget {
 
 class _FlashCardAppState extends State<FlashCardApp> {
   final AppRouter _appRouter = AppRouter();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

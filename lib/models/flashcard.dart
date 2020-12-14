@@ -1,21 +1,38 @@
-class Flashcard {
+import 'package:equatable/equatable.dart';
+import 'package:flutter_flashcards/error/exceptions.dart';
+import 'package:flutter_flashcards/models/tag.dart';
+import 'package:meta/meta.dart';
 
-  int id;
-  String type;
-  String front;
-  String back;
-  int deckId;
+class Flashcard extends Equatable{
 
-  Flashcard({this.id, this.type, this.front, this.back, this.deckId});
+  final int id;
+  final String type;
+  final String front;
+  final String back;
+  final int deckId;
+  Set<Tag> tags = {};
 
-  ///DB Conversions
+  Flashcard({
+    this.id,
+    this.type,
+    this.front,
+    this.back,
+    @required this.deckId,
+    tags
+  }) {
+    tags = this.tags;
+    if(deckId == null || deckId == 0) {
+      throw CardException('There is no valid deck_id specified.');
+    }
+  }
 
-  factory Flashcard.fromMap(Map<String, dynamic> json) => new Flashcard(
-    id: json['id'],
-    type: json['type'],
-    front: json['front'],
-    back: json['back'],
-    deckId: json['deckId'],
+  factory Flashcard.fromMap(Map<String, dynamic> cardJson) => Flashcard(
+    id: cardJson['id'],
+    type: cardJson['type'],
+    front: cardJson['front'],
+    back: cardJson['back'],
+    deckId: cardJson['deckId'],
+    tags: cardJson['tags']
   );
 
   Map<String, dynamic> toMap() => {
@@ -24,5 +41,9 @@ class Flashcard {
     'front': front,
     'back': back,
     'deckId': deckId,
+    'tags': tags.toString()
   };
+
+  @override
+  List<Object> get props => [id, type, front, back, deckId, tags];
 }

@@ -1,0 +1,8 @@
+{
+  "id": null,
+  "type": "Basic",
+  "front": "test front",
+  "back": "test back",
+  "deckId": 1,
+  "tags": "{}"
+}

@@ -1,43 +1,53 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_flashcards/models/deck.dart';
 
-class DeckCard extends StatelessWidget {
+class DeckItem extends StatelessWidget {
   final Deck deck;
-  DeckCard({this.deck}); //constructor
+
+  DeckItem({
+    Key key,
+    @required this.deck
+  }) : super(key : key); //constructor
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: Key(deck.id.toString()),
       child: Container(
         width: 300,
         height: 100,
         child: Column(
+          textDirection: TextDirection.ltr,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(15, 10, 0, 3),
-              child: Text(
-                  this.deck.title,
+              key: Key('deckTitle'),
+              padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
+              child: Text(deck.title,
                   style: Theme.of(context).textTheme.headline2
               ),
             ),
             Container(
-              child: Text(
-                'Cards: ${this.deck.size.toString()}',
+              key: Key('deckSize'),
+              child: Text('Cards: ${deck.size.toString()}',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
             ),
             Container(
-              child: Text(
-                'Performance: ${this.deck.performance.toString()}%',
+              key: Key('deckPerformance'),
+              child: Text('Performance: ${deck.performance.toString()}%',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-            )
+            ),
           ],
         )
       )
     );
   }
+
+
 }
