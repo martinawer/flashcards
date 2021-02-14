@@ -50,14 +50,14 @@ class _FlashcardItemState extends State<FlashcardItem> {
                     child: Text('Basic: ${widget.card.type}\nFront: ${widget.card.front}\nBack: ${widget.card.back}'),
                   )
               ),
-              Container(
-                child: Wrap(
-                    direction: Axis.horizontal,
-                    spacing: 2,
-                    runSpacing: 1,
-                    children: _buildTagsAsClips()
-                ),
-              )
+              // Container(
+              //   child: Wrap(
+              //       direction: Axis.horizontal,
+              //       spacing: 2,
+              //       runSpacing: 1,
+              //       children: _buildTagsAsClips()
+              //   ),
+              // )
             ],
           ),
         )
@@ -80,16 +80,18 @@ class _FlashcardItemState extends State<FlashcardItem> {
     }
   }
 
-  List<Widget> _buildTagsAsClips() {
-    List<Widget> chips = <Widget>[];
-    widget.card.tags.forEach((element) {
-      chips.add(
-          Chip(
-            label: Text(element.name),
-            backgroundColor: element.color,
-          )
-      );
-    });
-    return chips;
-  }
+  // List<Widget> _buildTagsAsClips() {
+  //   List<Widget> chips = <Widget>[];
+  //   if(widget.card.tags != null) {
+  //     widget.card.tags.forEach((element) {
+  //       chips.add(
+  //           Chip(
+  //             label: Text(element.name),
+  //             backgroundColor: element.color,
+  //           )
+  //       );
+  //     });
+  //   }
+  //   return chips;
+  // }
 }

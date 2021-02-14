@@ -21,9 +21,3 @@ class StateException implements Exception {
   final String message;
   StateException(this.message);
 }
-
-///thrown when a something else then a tag was returned when adding or creating a Tag
-class TagException implements Exception {
-  final String message;
-  TagException(this.message);
-}

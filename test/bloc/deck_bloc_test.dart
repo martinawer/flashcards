@@ -29,7 +29,7 @@ void main() {
         when(mockDeckProvider.getAll()).thenAnswer((_) async => []);
         return DeckBloc(mockDeckProvider);
       },
-      act: (deckBloc) => deckBloc.add(LoadDecks()),
+      act: (deckBloc) => deckBloc.add(GetDecks()),
       expect: [DecksLoading(), DecksLoaded([])],
     );
 

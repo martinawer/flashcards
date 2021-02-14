@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_flashcards/bloc/decks/decks.dart';
 import 'package:flutter_flashcards/error/exceptions.dart';
-import 'package:flutter_flashcards/widgets/deck_item.dart';
 import 'package:flutter_flashcards/models/deck.dart';
+import 'package:flutter_flashcards/widgets/deck_item.dart';
 
 class DeckListPage extends StatefulWidget {
   @override
@@ -51,12 +53,15 @@ class _DeckListPageState extends State<DeckListPage> {
       body: BlocBuilder<DeckBloc, DeckState>(
         builder: (BuildContext context, DeckState state) {
           if(state is DeckInitial) {
-            deckBloc.add(LoadDecks());
+            deckBloc.add(GetDecks());
             return Container();
           } else if(state is DecksLoading) {
             return Container(child: Center(child: CircularProgressIndicator()));
           } else if(state is DecksLoaded) {
             return _buildDecksView(context, state);
+          } else if(state is DeckLoaded) {
+            deckBloc.add(GetDecks());
+            return Container(child: Center(child: CircularProgressIndicator()));
           } else {
             return Container(child: Center(child: Text('Error')));
           }
@@ -83,14 +88,10 @@ class _DeckListPageState extends State<DeckListPage> {
           itemCount: state.decks.length,
           itemBuilder: (BuildContext context, int index) {
             Deck item =  state.decks[index];
-            print('deckListPage: ${item.toMap()}');
             return InkWell(
-              child: DeckItem(deck: item),
               onTap: () {
                 Navigator.of(context).pushNamed('/deck', arguments: item.id).then((value) {
-                  setState(() {
-                    deckBloc.add(LoadDecks());
-                  });
+                    deckBloc.add(GetDecks());
                 });
               },
               onLongPress: () {
@@ -101,6 +102,7 @@ class _DeckListPageState extends State<DeckListPage> {
                     }
                 );
               },
+              child: DeckItem(deck: item),
             );
           }
       );

@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'database.dart';
+import 'package:flutter_flashcards/data/database.dart';
 
 class TableProvider {
   const TableProvider();

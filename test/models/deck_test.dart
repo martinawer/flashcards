@@ -11,8 +11,6 @@ import '../fixtures/fixture_reader.dart';
       id: 1,
       performance: 0,
       size: 0,
-      tags: [],
-
   );
 
   test('fromMap() should convert JSON values to deck', () {

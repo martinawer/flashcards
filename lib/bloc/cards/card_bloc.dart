@@ -1,7 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_flashcards/bloc/cards/cards.dart';
 import 'package:flutter_flashcards/data/card_provider.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
-import 'cards.dart';
 
 class CardBloc extends Bloc<CardEvent, CardState> {
   final CardProvider cardProvider;

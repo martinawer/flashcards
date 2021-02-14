@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_flashcards/bloc/cards/cards.dart';
-import 'package:flutter_flashcards/bloc/decks/deck_bloc.dart';
-import 'package:flutter_flashcards/bloc/decks/deck_event.dart';
+
+import 'package:flutter_flashcards/bloc/blocs.dart';
+import 'package:flutter_flashcards/error/exceptions.dart';
 import 'package:flutter_flashcards/models/models.dart';
 import 'package:flutter_flashcards/tag_search.dart';
 import 'package:flutter_flashcards/widgets/flashcard_item.dart';
@@ -20,16 +21,20 @@ class _FlashcardsOverviewPageState extends State<FlashcardsOverviewPage> {
   bool _inEditMode = false;
   bool _isEditableInViewMode = false;
   Set<Flashcard> cards = {};
+  int deckSize;
+
   CardBloc cardBloc;
   DeckBloc deckBloc;
-  int deckSize;
+  TagBloc tagBloc;
 
   @override
   void initState() {
     super.initState();
     cardBloc = BlocProvider.of<CardBloc>(context);
-    cardBloc.add(LoadCards(widget.deck.id));
     deckBloc = BlocProvider.of<DeckBloc>(context);
+    tagBloc = BlocProvider.of<TagBloc>(context);
+
+    cardBloc.add(LoadCards(widget.deck.id));
     deckSize = widget.deck.size;
   }
 
@@ -109,7 +114,7 @@ class _FlashcardsOverviewPageState extends State<FlashcardsOverviewPage> {
         },
       );
     } else {
-      throw StateError;
+      throw StateException('The Function call in the following state is invalid: $state');
     }
   }
 
@@ -153,7 +158,13 @@ class _FlashcardsOverviewPageState extends State<FlashcardsOverviewPage> {
         IconButton(
           icon: Icon(Icons.label_outline),
           color: Colors.blue,
-          onPressed: cards.isNotEmpty ?  openSearch : null
+          onPressed: () async {
+            if(cards.isNotEmpty) {
+              await openSearch(context);
+            } else {
+              return null;
+            }
+          }
         ),
         IconButton(
           icon: Icon(Icons.delete),
@@ -170,25 +181,21 @@ class _FlashcardsOverviewPageState extends State<FlashcardsOverviewPage> {
     });
   }
 
-  Future<void> openSearch() async {
+  Future<void> openSearch(BuildContext context) async {
     var result = await showSearch(
         context: context,
-        delegate: TagSearch(widget.deck.tags)
+        delegate: TagSearch(tagBloc)
     );
-    if (!widget.deck.tags.contains(result)) {
-      _attachTag(result);
-    }
+    _attachTag(result);
   }
 
   void _attachTag(Tag tag) {
     if(tag != null) {
+      //tagBloc.listen(() { });
+      tagBloc.add(AddDeckTag(tag));
       cards.forEach((card) {
-        card.tags.add(tag);
-        cardBloc.add(UpdateCard(card));
+        tagBloc.add(AddCardTag(card.id, tag.id));
       });
-
-      widget.deck.tags.add(tag);
-      deckBloc.add(UpdateDeck(widget.deck));
     }
   }
 

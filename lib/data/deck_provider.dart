@@ -1,6 +1,7 @@
+import 'package:sqflite/sqflite.dart';
+
 import 'package:flutter_flashcards/data/table_provider.dart';
 import 'package:flutter_flashcards/models/deck.dart';
-import 'package:sqflite/sqflite.dart';
 
 class DeckProvider extends TableProvider {
   const DeckProvider();

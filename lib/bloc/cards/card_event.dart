@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
 
-///Events are Use cases of the module
+///Events are Use cases of the bloc
 abstract class CardEvent extends Equatable {
     const CardEvent();
 }

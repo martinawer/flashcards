@@ -1,8 +1,8 @@
-import 'package:flutter_flashcards/models/deck.dart';
-
-import 'decks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_flashcards/bloc/decks/decks.dart';
 import 'package:flutter_flashcards/data/deck_provider.dart';
+import 'package:flutter_flashcards/models/deck.dart';
 
 class DeckBloc extends Bloc<DeckEvent, DeckState> {
   final DeckProvider deckProvider;
@@ -12,7 +12,7 @@ class DeckBloc extends Bloc<DeckEvent, DeckState> {
   @override
   Stream<DeckState> mapEventToState(DeckEvent event) async* {
     yield DecksLoading();
-    if(event is LoadDecks) {
+    if(event is GetDecks) {
       yield* _reloadDecks();
     } else if(event is AddDeck) {
       await deckProvider.create(event.newDeck);

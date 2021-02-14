@@ -1,7 +1,9 @@
 import 'dart:io';
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+
 
 class DBProvider {
   DBProvider._();
@@ -24,6 +26,8 @@ class DBProvider {
         onCreate: (Database db, int version) async {
           await _createDeckTable(db);
           await _createFlashcardTable(db);
+          await _createTagTable(db);
+          await _createCardTagJunctionTable(db);
         });
   }
 
@@ -35,8 +39,8 @@ class DBProvider {
         'back TEXT NOT NULL,'
         'deckId INTEGER,'
         'tags TEXT,'
-        'FOREIGN KEY(deckId) REFERENCES Deck(id)'
-        ')');
+        'FOREIGN KEY(deckId) REFERENCES Deck(id))'
+    );
   }
 
   Future<void> _createDeckTable(Database db) async {
@@ -45,8 +49,27 @@ class DBProvider {
         'title TEXT,'
         'size INTEGER NOT NULL,'
         'performance INTEGER NOT NULL,'
-        'tags TEXT'
-        ')');
+        'tags TEXT)'
+    );
+  }
+
+  Future<void> _createTagTable(Database db) async {
+    await db.execute('CREATE TABLE Tag ('
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        'name TEXT NOT NULL,'
+        'deck_id INTEGER NOT NULL,'
+        'FOREIGN KEY(deck_id) REFERENCES Deck(id))'
+    );
+  }
+
+  Future<void> _createCardTagJunctionTable(Database db) async {
+    await db.execute('CREATE TABLE Card_Tag ('
+        'tag_id INTEGER NOT NULL,'
+        'card_id INTEGER NOT NULL,'
+        'PRIMARY KEY(tag_id, card_id),'
+        'FOREIGN KEY(tag_id) REFERENCES Tag(id),'
+        'FOREIGN KEY(card_id) REFERENCES Card(id))'
+    );
   }
 
   Future<void> close() async {

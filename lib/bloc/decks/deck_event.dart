@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_flashcards/models/deck.dart';
 
-///Events are Use cases of the module
+///Events are Use cases of the bloc
 abstract class DeckEvent extends Equatable {
   const DeckEvent();
 }
 
-class LoadDecks extends DeckEvent {
-  const LoadDecks();
+class GetDecks extends DeckEvent {
+  const GetDecks();
 
   @override
   List<Object> get props => [];

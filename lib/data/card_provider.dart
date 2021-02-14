@@ -1,6 +1,7 @@
+import 'package:sqflite/sqflite.dart';
+
 import 'package:flutter_flashcards/data/table_provider.dart';
 import 'package:flutter_flashcards/models/flashcard.dart';
-import 'package:sqflite/sqflite.dart';
 
 class CardProvider extends TableProvider {
   const CardProvider();
@@ -18,7 +19,7 @@ class CardProvider extends TableProvider {
 
   Future<void> update(Flashcard newFlashcard) async {
     final Database db = await database;
-    await db.update('Flashcard', newFlashcard.toMap(), where: 'id= ?', whereArgs: [newFlashcard.id]);
+    await db.update('Flashcard', newFlashcard.toMap(), where: 'id = ?', whereArgs: [newFlashcard.id]);
   }
 
   Future<void> delete(int id) async {

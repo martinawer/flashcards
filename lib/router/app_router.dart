@@ -1,17 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_flashcards/bloc/cards/card_bloc.dart';
 import 'package:flutter_flashcards/bloc/decks/deck_bloc.dart';
+import 'package:flutter_flashcards/bloc/tags/tag_bloc.dart';
 import 'package:flutter_flashcards/data/deck_provider.dart';
 import 'package:flutter_flashcards/data/card_provider.dart';
+import 'package:flutter_flashcards/data/tag_provider.dart';
 import 'package:flutter_flashcards/models/models.dart';
 import 'package:flutter_flashcards/pages/pages.dart';
 
 class AppRouter {
   final DeckBloc _deckBloc = DeckBloc(DeckProvider());
   final CardBloc _cardBloc = CardBloc(CardProvider());
-  //TODO: can do separate module for DI with get it
+  final TagBloc _tagBloc = TagBloc(TagProvider());
+
   Route onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case '/':
@@ -46,8 +50,15 @@ class AppRouter {
       case '/deck':
         if(routeSettings.arguments is int) {
           return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _deckBloc,
+              builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: _tagBloc,
+                    ),
+                    BlocProvider.value(
+                      value: _deckBloc,
+                    )
+                  ],
               child: DeckPreviewPage(
                 deckId: routeSettings.arguments,
               )
@@ -67,6 +78,9 @@ class AppRouter {
                     ),
                     BlocProvider.value(
                       value: _deckBloc,
+                    ),
+                    BlocProvider.value(
+                      value: _tagBloc,
                     )
                   ],
                   child: FlashcardsOverviewPage(
@@ -99,12 +113,13 @@ class AppRouter {
 
   MaterialPageRoute _errorRoute() {
     return MaterialPageRoute(
-      builder: (_) => Error404Page()
+      builder: (_) => ErrorPage('There is an issue with Routing.')
     );
   }
 
   void dispose() {
     _cardBloc.close();
     _deckBloc.close();
+    _tagBloc.close();
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter_flashcards/bloc/cards/cards.dart';
 import 'package:flutter_flashcards/widgets/leading_header_button.dart';
 import 'package:flutter_flashcards/widgets/learn_card.dart';
 import 'package:flutter_flashcards/models/deck.dart';
-import 'package:flutter_flashcards/models/flashcard.dart';
 
 class LearnPage extends StatefulWidget {
   final Deck deck;
@@ -16,11 +15,6 @@ class LearnPage extends StatefulWidget {
 
 class _LearnPageState extends State<LearnPage> {
   CardBloc cardBloc;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -48,38 +42,17 @@ class _LearnPageState extends State<LearnPage> {
         },
         builder: (BuildContext context, CardState state) {
           if(state is CardInitial) {
-            return _buildInitialView();
+            return Card();
           } else if(state is CardsLoading){
-            return _buildLoadingView();
+            return Card(child: CircularProgressIndicator());
           } else if(state is CardsLoaded) {
-            return _buildCard(state.cards);
+            return LearnCard(cards: state.cards);
           } else {
-            return _buildErrorView();
+            return Card(child: Center(child: Text('Error')));
           }
         },
       )
     );
   }
 
-  Widget _buildCard(List<Flashcard> cards) {
-    return LearnCard(cards: cards);
-  }
-
-  Widget _buildLoadingView() {
-    return Card(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  Widget _buildInitialView() {
-    return Card();
-  }
-
-  Widget _buildErrorView() {
-    return Card(
-      child: Center(
-        child: Text('Error')
-      )
-    );
-  }
 }
